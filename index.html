@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gestão de Calendários | Senac Três Corações</title>
+  <style>
+    :root{--blue:#0b5c9d;--blue2:#0f6fbf;--bg:#f4f7fb;--card:#fff;--text:#1d2a39;--muted:#6c7a89;--line:#dce4ec;--green:#1f9d55;--orange:#f59e0b;--red:#d9534f;--purple:#7656c7}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;padding:24px 28px;box-shadow:0 2px 8px #0002}
+    .top{display:flex;gap:18px;align-items:center;justify-content:space-between;max-width:1500px;margin:auto}.brand h1{margin:0;font-size:28px}.brand p{margin:6px 0 0;opacity:.9}.badge{background:#fff2;padding:10px 14px;border:1px solid #ffffff44;border-radius:999px}
+    .layout{max-width:1500px;margin:22px auto;display:grid;grid-template-columns:290px 1fr;gap:18px;padding:0 18px}
+    .sidebar,.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 16px #1a2b3c0d}
+    .sidebar{padding:16px;height:fit-content;position:sticky;top:18px}.sidebar h3{margin:0 0 12px}.navbtn{width:100%;text-align:left;padding:11px 12px;border:0;background:transparent;border-radius:10px;color:var(--text);font-weight:600;cursor:pointer}.navbtn:hover,.navbtn.active{background:#eaf3fb;color:var(--blue)}
+    .main{display:grid;gap:18px}.toolbar{display:flex;gap:10px;flex-wrap:wrap}.toolbar input,.toolbar select,.toolbar button{padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:white}.toolbar input{min-width:320px;flex:1}.toolbar button{cursor:pointer;font-weight:700}.primary{background:var(--blue)!important;color:#fff;border-color:var(--blue)!important}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stat{padding:16px;border-radius:14px;background:white;border:1px solid var(--line)}.stat strong{display:block;font-size:26px}.stat span{color:var(--muted);font-size:13px}
+    .contentgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}.panel{padding:16px}.panel h2{font-size:18px;margin:0 0 14px}.folders{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.folder{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdff;cursor:pointer}.folder:hover{border-color:#9dc5e8}.folder b{display:block}.folder small{color:var(--muted)}
+    .calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.dow,.day{min-height:92px;border:1px solid var(--line);border-radius:10px;padding:8px;background:white}.dow{min-height:auto;text-align:center;font-weight:700;background:#f7fafc}.day.muted{opacity:.35}.num{font-size:12px;font-weight:700;color:var(--muted)}.event{margin-top:6px;padding:6px;border-radius:8px;font-size:11px;font-weight:700}.uc{background:#dbeeff;color:#0c5f9e}.holiday{background:#ffe9c2;color:#9b5b00}.replace{background:#e8ddff;color:#5f3fb0}.cancel{background:#ffe0df;color:#a43a36}
+    .timeline{display:grid;gap:8px}.row{display:grid;grid-template-columns:110px 1fr 110px 100px;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px}.pill{padding:5px 8px;border-radius:999px;font-size:11px;font-weight:700;text-align:center}.ok{background:#dff4e8;color:#167a41}.warn{background:#fff0cf;color:#9a6200}
+    .section-title{display:flex;justify-content:space-between;align-items:center;gap:12px}.note{padding:12px;border-left:4px solid var(--blue);background:#eef6fd;border-radius:8px;color:#345}
+    .modal{position:fixed;inset:0;background:#0007;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{width:min(720px,100%);background:#fff;border-radius:16px;padding:20px}.modalbox h3{margin-top:0}.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}.option{border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer}.option:hover{border-color:var(--blue)}.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}.actions button{padding:10px 14px;border-radius:10px;border:1px solid var(--line);cursor:pointer}
+    @media(max-width:1050px){.layout{grid-template-columns:1fr}.sidebar{position:static}.contentgrid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:650px){.stats,.folders,.options{grid-template-columns:1fr}.row{grid-template-columns:1fr}.toolbar input{min-width:0}.calendar{gap:3px}.day{min-height:72px;padding:5px}.event{font-size:9px}}
+  </style>
+</head>
+<body>
+<header><div class="top"><div class="brand"><h1>Gestão de Calendários</h1><p>Senac Três Corações • Planejamento acadêmico colaborativo</p></div><div class="badge">Protótipo funcional</div></div></header>
+<div class="layout">
+  <aside class="sidebar">
+    <h3>Navegação</h3>
+    <button class="navbtn active">🏠 Visão geral</button>
+    <button class="navbtn">📁 Cursos FIC</button>
+    <button class="navbtn">🎓 Técnicos</button>
+    <button class="navbtn">🏢 Corporativos</button>
+    <button class="navbtn">🧑‍🎓 Estágio</button>
+    <button class="navbtn">📆 Planejamento 2027</button>
+    <button class="navbtn">🕘 Histórico</button>
+    <button class="navbtn">⚙️ Configurações</button>
+    <hr style="border:none;border-top:1px solid var(--line);margin:16px 0">
+    <div class="note"><b>Objetivo</b><br>Substituir a busca em dezenas de pastas e planilhas por uma única gestão centralizada.</div>
+  </aside>
+
+  <main class="main">
+    <section class="toolbar">
+      <input id="search" placeholder="Buscar curso, turma, instrutor ou código...">
+      <select><option>Todos os anos</option><option>2026</option><option>2027</option></select>
+      <button onclick="alert('Importação de planilhas será conectada na próxima etapa.')">Importar Excel</button>
+      <button class="primary" onclick="openModal()">+ Nova aula / alteração</button>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><strong>154</strong><span>planilhas identificadas</span></div>
+      <div class="stat"><strong>225</strong><span>arquivos no acervo</span></div>
+      <div class="stat"><strong>7</strong><span>grandes categorias</span></div>
+      <div class="stat"><strong>2</strong><span>formas de reposição</span></div>
+    </section>
+
+    <section class="contentgrid">
+      <div class="panel">
+        <div class="section-title"><h2>Pastas e categorias</h2><small>Estrutura semelhante à atual</small></div>
+        <div class="folders">
+          <div class="folder"><b>📁 Calendários 2026 FIC</b><small>106 arquivos</small></div>
+          <div class="folder"><b>📁 PC</b><small>69 arquivos</small></div>
+          <div class="folder"><b>📁 Calendários Técnicos</b><small>19 arquivos</small></div>
+          <div class="folder"><b>📁 Planejamento 2027</b><small>11 arquivos</small></div>
+          <div class="folder"><b>📁 Estágio</b><small>6 arquivos</small></div>
+          <div class="folder"><b>📁 Dependência</b><small>5 arquivos</small></div>
+          <div class="folder"><b>📁 Contratos Corporativos 2026</b><small>3 arquivos</small></div>
+          <div class="folder"><b>📁 Planejamento Geral</b><small>planilhas de projeção</small></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="calendar-head"><button onclick="changeMonth(-1)">◀</button><h2 id="monthTitle">Outubro 2026</h2><button onclick="changeMonth(1)">▶</button></div>
+        <div class="calendar" id="calendar"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title"><h2>Turma em destaque — Assistente de Recursos Humanos</h2><button class="primary" onclick="openModal()">Cancelar / Reagendar aula</button></div>
+      <div class="timeline">
+        <div class="row"><b>039.2026.0153</b><span>Assistente de Recursos Humanos • 08h às 12h</span><span>160 horas</span><span class="pill ok">Em andamento</span></div>
+        <div class="row"><span>14/10/2026</span><span>UC 2 — Rotinas de RH</span><span>4h</span><span class="pill ok">Normal</span></div>
+        <div class="row"><span>15/10/2026</span><span>UC 2 — Rotinas de RH</span><span>4h</span><span class="pill warn">Alterável</span></div>
+        <div class="row"><span>16/10/2026</span><span>UC 3 — Apoio aos processos</span><span>4h</span><span class="pill ok">Normal</span></div>
+      </div>
+    </section>
+
+    <section class="contentgrid">
+      <div class="panel"><h2>Regras automáticas</h2><div class="note">Ao cancelar uma aula, o colaborador escolhe entre <b>reorganizar todas as próximas aulas</b> ou <b>agendar apenas uma reposição</b>. O sistema preserva a carga horária, evita feriados e registra todas as alterações.</div></div>
+      <div class="panel"><h2>Colaboração e auditoria</h2><div class="note">Edição simultânea, histórico de quem alterou, comparação entre calendário original e atualizado, exportação para Excel/PDF e controle de permissões.</div></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal"><div class="modalbox">
+  <h3>Como deseja tratar a aula?</h3>
+  <p>Escolha a ação. Nesta versão é apenas uma demonstração visual.</p>
+  <div class="options">
+    <div class="option" onclick="choose('reorganizar')"><b>🔄 Reorganizar cronograma</b><p>Redistribui automaticamente as próximas aulas, mantendo sequência, carga horária e regras do curso.</p></div>
+    <div class="option" onclick="choose('reposicao')"><b>📌 Agendar somente reposição</b><p>Mantém as demais aulas como estão e adiciona uma nova data para repor a carga horária perdida.</p></div>
+  </div>
+  <div class="actions"><button onclick="closeModal()">Fechar</button></div>
+</div></div>
+
+<script>
+  const events={9:[['UC 2','uc']],12:[['Feriado','holiday']],14:[['UC 2','uc']],15:[['Reposição','replace']],16:[['UC 3','uc']],22:[['Aula cancelada','cancel']],27:[['UC 4','uc']]};
+  let current=new Date(2026,9,1);
+  const months=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  function render(){const y=current.getFullYear(),m=current.getMonth();document.getElementById('monthTitle').textContent=months[m]+' '+y;const cal=document.getElementById('calendar');cal.innerHTML='';['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d=>cal.innerHTML+=`<div class="dow">${d}</div>`);const first=new Date(y,m,1).getDay();const days=new Date(y,m+1,0).getDate();for(let i=0;i<first;i++)cal.innerHTML+='<div class="day muted"></div>';for(let d=1;d<=days;d++){let html=`<div class="day"><div class="num">${d}</div>`;(events[d]||[]).forEach(e=>html+=`<div class="event ${e[1]}">${e[0]}</div>`);html+='</div>';cal.innerHTML+=html}}
+  function changeMonth(step){current.setMonth(current.getMonth()+step);render()}
+  function openModal(){document.getElementById('modal').classList.add('open')}function closeModal(){document.getElementById('modal').classList.remove('open')}function choose(type){alert(type==='reorganizar'?'Opção selecionada: reorganizar todas as próximas aulas.':'Opção selecionada: agendar somente uma reposição.');closeModal()}
+  document.getElementById('search').addEventListener('input',e=>{document.querySelectorAll('.folder').forEach(x=>x.style.opacity=x.innerText.toLowerCase().includes(e.target.value.toLowerCase())||!e.target.value?'1':'.25')});render();
+</script>
+</body>
+</html>
