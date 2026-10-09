@@ -28,14 +28,14 @@
 <div class="layout">
   <aside class="sidebar">
     <h3>Navegação</h3>
-    <button class="navbtn active">🏠 Visão geral</button>
-    <button class="navbtn">📁 Cursos FIC</button>
-    <button class="navbtn">🎓 Técnicos</button>
-    <button class="navbtn">🏢 Corporativos</button>
-    <button class="navbtn">🧑‍🎓 Estágio</button>
-    <button class="navbtn">📆 Planejamento 2027</button>
-    <button class="navbtn">🕘 Histórico</button>
-    <button class="navbtn">⚙️ Configurações</button>
+    <button onclick="navigate(this)" class="navbtn active">🏠 Visão geral</button>
+    <button onclick="navigate(this)" class="navbtn">📁 Cursos FIC</button>
+    <button onclick="navigate(this)" class="navbtn">🎓 Técnicos</button>
+    <button onclick="navigate(this)" class="navbtn">🏢 Corporativos</button>
+    <button onclick="navigate(this)" class="navbtn">🧑‍🎓 Estágio</button>
+    <button onclick="navigate(this)" class="navbtn">📆 Planejamento 2027</button>
+    <button onclick="navigate(this)" class="navbtn">🕘 Histórico</button>
+    <button onclick="navigate(this)" class="navbtn">⚙️ Configurações</button>
     <hr style="border:none;border-top:1px solid var(--line);margin:16px 0">
     <div class="note"><b>Objetivo</b><br>Substituir a busca em dezenas de pastas e planilhas por uma única gestão centralizada.</div>
   </aside>
@@ -43,7 +43,7 @@
   <main class="main">
     <section class="toolbar">
       <input id="search" placeholder="Buscar curso, turma, instrutor ou código...">
-      <select><option>Todos os anos</option><option>2026</option><option>2027</option></select>
+      <select onchange="filterYear(this.value)"><option>Todos os anos</option><option>2026</option><option>2027</option></select>
       <button onclick="alert('Importação de planilhas será conectada na próxima etapa.')">Importar Excel</button>
       <button class="primary" onclick="openModal()">+ Nova aula / alteração</button>
     </section>
@@ -59,19 +59,19 @@
       <div class="panel">
         <div class="section-title"><h2>Pastas e categorias</h2><small>Estrutura semelhante à atual</small></div>
         <div class="folders">
-          <div class="folder"><b>📁 Calendários 2026 FIC</b><small>106 arquivos</small></div>
-          <div class="folder"><b>📁 PC</b><small>69 arquivos</small></div>
-          <div class="folder"><b>📁 Calendários Técnicos</b><small>19 arquivos</small></div>
-          <div class="folder"><b>📁 Planejamento 2027</b><small>11 arquivos</small></div>
-          <div class="folder"><b>📁 Estágio</b><small>6 arquivos</small></div>
-          <div class="folder"><b>📁 Dependência</b><small>5 arquivos</small></div>
-          <div class="folder"><b>📁 Contratos Corporativos 2026</b><small>3 arquivos</small></div>
-          <div class="folder"><b>📁 Planejamento Geral</b><small>planilhas de projeção</small></div>
+          <div class="folder" role="button" tabindex="0" onclick="selectFolder(this)" onkeydown="if(event.key==='Enter')selectFolder(this)"><b>📁 Calendários 2026 FIC</b><small>106 arquivos</small></div>
+          <div class="folder" role="button" tabindex="0" onclick="selectFolder(this)" onkeydown="if(event.key==='Enter')selectFolder(this)"><b>📁 PC</b><small>69 arquivos</small></div>
+          <div class="folder" role="button" tabindex="0" onclick="selectFolder(this)" onkeydown="if(event.key==='Enter')selectFolder(this)"><b>📁 Calendários Técnicos</b><small>19 arquivos</small></div>
+          <div class="folder" role="button" tabindex="0" onclick="selectFolder(this)" onkeydown="if(event.key==='Enter')selectFolder(this)"><b>📁 Planejamento 2027</b><small>11 arquivos</small></div>
+          <div class="folder" role="button" tabindex="0" onclick="selectFolder(this)" onkeydown="if(event.key==='Enter')selectFolder(this)"><b>📁 Estágio</b><small>6 arquivos</small></div>
+          <div class="folder" role="button" tabindex="0" onclick="selectFolder(this)" onkeydown="if(event.key==='Enter')selectFolder(this)"><b>📁 Dependência</b><small>5 arquivos</small></div>
+          <div class="folder" role="button" tabindex="0" onclick="selectFolder(this)" onkeydown="if(event.key==='Enter')selectFolder(this)"><b>📁 Contratos Corporativos 2026</b><small>3 arquivos</small></div>
+          <div class="folder" role="button" tabindex="0" onclick="selectFolder(this)" onkeydown="if(event.key==='Enter')selectFolder(this)"><b>📁 Planejamento Geral</b><small>planilhas de projeção</small></div>
         </div>
       </div>
 
       <div class="panel">
-        <div class="calendar-head"><button onclick="changeMonth(-1)">◀</button><h2 id="monthTitle">Outubro 2026</h2><button onclick="changeMonth(1)">▶</button></div>
+        <div id="selectionNotice" class="note" style="display:none;margin-bottom:12px"></div><div class="calendar-head"><button onclick="changeMonth(-1)">◀</button><h2 id="monthTitle">Outubro 2026</h2><button onclick="changeMonth(1)">▶</button></div>
         <div class="calendar" id="calendar"></div>
       </div>
     </section>
@@ -107,8 +107,8 @@
   const events={9:[['UC 2','uc']],12:[['Feriado','holiday']],14:[['UC 2','uc']],15:[['Reposição','replace']],16:[['UC 3','uc']],22:[['Aula cancelada','cancel']],27:[['UC 4','uc']]};
   let current=new Date(2026,9,1);
   const months=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  function render(){const y=current.getFullYear(),m=current.getMonth();document.getElementById('monthTitle').textContent=months[m]+' '+y;const cal=document.getElementById('calendar');cal.innerHTML='';['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d=>cal.innerHTML+=`<div class="dow">${d}</div>`);const first=new Date(y,m,1).getDay();const days=new Date(y,m+1,0).getDate();for(let i=0;i<first;i++)cal.innerHTML+='<div class="day muted"></div>';for(let d=1;d<=days;d++){let html=`<div class="day"><div class="num">${d}</div>`;(events[d]||[]).forEach(e=>html+=`<div class="event ${e[1]}">${e[0]}</div>`);html+='</div>';cal.innerHTML+=html}}
-  function changeMonth(step){current.setMonth(current.getMonth()+step);render()}
+  function render(){const y=current.getFullYear(),m=current.getMonth();document.getElementById('monthTitle').textContent=months[m]+' '+y;const cal=document.getElementById('calendar');cal.innerHTML='';['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d=>cal.innerHTML+=`<div class="dow">${d}</div>`);const first=new Date(y,m,1).getDay();const days=new Date(y,m+1,0).getDate();for(let i=0;i<first;i++)cal.innerHTML+='<div class="day muted"></div>';for(let d=1;d<=days;d++){let html=`<div class="day" onclick="openModal()" style="cursor:pointer"><div class="num">${d}</div>`;(m===9&&y===2026?events[d]||[]:[]).forEach(e=>html+=`<div class="event ${e[1]}">${e[0]}</div>`);html+='</div>';cal.innerHTML+=html}}
+  function navigate(el){document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');const label=el.textContent.trim();document.getElementById('selectionNotice').style.display='block';document.getElementById('selectionNotice').textContent='Seção selecionada: '+label+' — navegação demonstrativa. Selecione uma pasta para ver a categoria.';document.querySelectorAll('.folder').forEach(f=>{f.style.outline=f.textContent.toLowerCase().includes(label.replace(/^[^\wÀ-ÿ]+/,'').toLowerCase().split(' ')[0])?'2px solid #0b5c9d':''});}function selectFolder(el){document.querySelectorAll('.folder').forEach(f=>f.style.outline='');el.style.outline='2px solid #0b5c9d';const n=document.getElementById('selectionNotice');n.style.display='block';n.textContent='Pasta selecionada: '+el.querySelector('b').textContent+'. Os arquivos reais serão listados após a importação.';document.querySelector('.timeline').scrollIntoView({behavior:'smooth',block:'nearest'});}function filterYear(v){const n=document.getElementById('selectionNotice');n.style.display='block';n.textContent='Filtro de ano: '+v+'. Os dados demonstrativos continuam visíveis.';}function changeMonth(step){current.setMonth(current.getMonth()+step);render()}
   function openModal(){document.getElementById('modal').classList.add('open')}function closeModal(){document.getElementById('modal').classList.remove('open')}function choose(type){alert(type==='reorganizar'?'Opção selecionada: reorganizar todas as próximas aulas.':'Opção selecionada: agendar somente uma reposição.');closeModal()}
   document.getElementById('search').addEventListener('input',e=>{document.querySelectorAll('.folder').forEach(x=>x.style.opacity=x.innerText.toLowerCase().includes(e.target.value.toLowerCase())||!e.target.value?'1':'.25')});render();
 </script>
