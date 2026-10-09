@@ -1,0 +1,9 @@
+rules_version = '2';
+service firebase.storage {
+ match /b/{bucket}/o {
+  function member() { return request.auth != null && firestore.exists(/databases/(default)/documents/members/$(request.auth.uid)) && firestore.get(/databases/(default)/documents/members/$(request.auth.uid)).data.active == true; }
+  function admin() { return member() && firestore.get(/databases/(default)/documents/members/$(request.auth.uid)).data.role == 'admin'; }
+  match /calendarios/{path=**} { allow read: if member(); allow write: if admin() && request.resource.size < 25 * 1024 * 1024; }
+  match /{path=**} { allow read,write: if false; }
+ }
+}
